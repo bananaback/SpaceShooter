@@ -15,32 +15,6 @@ void Game::addGameScreen(const std::shared_ptr<GameScreen>& gameScreen)
 	gameScreens.push_back(gameScreen);
 }
 
-template<typename T>
-void Game::removeGameScreen()
-{
-    auto const it = std::find_if(gameScreens.begin(), gameScreens.end(), [](const std::shared_ptr<GameScreen>& screen) {
-        return dynamic_cast<T*>(screen.get()) != nullptr;
-        });
-
-    if (it != gameScreens.end())
-    {
-        gameScreens.erase(it);
-    }
-}
-
-template<typename T>
-void Game::switchGameScreen()
-{
-    for (const auto& screen : gameScreens)
-    {
-        if (dynamic_cast<T*>(screen.get()) != nullptr)
-        {
-            GameScreen currentGameScreen = screen;
-            break;
-        }
-    }
-}
-
 void Game::handleEvents()
 {
 
@@ -53,7 +27,9 @@ void Game::update()
 
 void Game::render()
 {
-
+    window.clear();
+    currentGameScreen->draw(window);
+    window.display();
 }
 
 void Game::start()

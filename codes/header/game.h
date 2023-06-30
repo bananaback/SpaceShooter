@@ -8,17 +8,37 @@
 
 #include <../codes/header/gamescreen.h>
 
-
 class Game
 {
 public:
 	Game();
 	~Game();
 	void addGameScreen(const std::shared_ptr<GameScreen>& gameScreen);
-	template <typename T>
-	void removeGameScreen();
-	template <typename T>
-	void switchGameScreen();
+	// https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file/495056#495056
+	template<typename T>
+	void removeGameScreen()
+	{
+		auto const it = std::find_if(gameScreens.begin(), gameScreens.end(), [](const std::shared_ptr<GameScreen>& screen) {
+			return dynamic_cast<T*>(screen.get()) != nullptr;
+			});
+
+		if (it != gameScreens.end())
+		{
+			gameScreens.erase(it);
+		}
+	}
+	template<typename T>
+	void switchGameScreen()
+	{
+		for (const auto& screen : gameScreens)
+		{
+			if (dynamic_cast<T*>(screen.get()) != nullptr)
+			{
+				currentGameScreen = screen;
+				break;
+			}
+		}
+	}
 	void handleEvents();
 	void update();
 	void render();

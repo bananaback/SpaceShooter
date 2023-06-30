@@ -1,6 +1,6 @@
 #include <iostream>
-#include <../codes/header/game.h>
 #include <../codes/header/mainmenuscreen.h>
+#include <../codes/header/game.h>
 
 int main()
 {
